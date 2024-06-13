@@ -506,8 +506,248 @@ Finally, the introduction also mentioned that the publish/subscribe system is �
     Then the code will ensure that `field1` is always an unsigned integer and that `field2` is always a string.
 2.  The semantics of each field are well-defined. There is no automated mechanism to ensure this, but all of the core ROS types have strong semantics associated with them. For instance, the IMU message contains a 3-dimensional vector for the measured angular velocity, and each of the dimensions is specified to be in radians/second. Other interpretations should not be placed into the message.
 
-   
+### Services
+## Table of Contents
 
+- [Service Server](#service_server)
+- [Service Client](#service_client)
+
+
+In ROS 2, a service refers to a remote procedure call. In other words, a node can make a remote procedure call to another node which will do a computation and return a result.
+
+This structure is reflected in how a service message definition looks:
+```
+uint32 request
+---
+uint32 response
+```
+In ROS 2, services are expected to return quickly, as the client is generally waiting on the result. Services should never be used for longer running processes, in particular processes that might need to be preempted for exceptional situations. If you have a service that will be doing a long-running computation, consider using an action instead.
+
+Services are identified by a service name, which looks much like a topic name (but is in a different namespace).
+
+A service consists of two parts: the service server and the service client.
+
+### Service Server <a name="service_server"></a>
+A service server is the entity that will accept a remote procedure request, and perform some computation on it. For instance, suppose the ROS 2 message contains the following:
+```
+uint32 a
+uint32 b
+---
+uint32 sum
+```
+The service server would be the entity that receives this message, adds `a` and `b` together, and returns the `sum`.
+
+**Note**
+There should only ever be one service server per service name. It is undefined which service server will receive client requests in the case of multiple service servers on the same service name.
+
+### Service Client <a name="service_client"></a>
+
+A service client is an entity that will request a remote service server to perform a computation on its behalf. Following from the example above, the service client is the entity that creates the initial message containing `a` and `b`, and waits for the service server to compute the sum and return the result.
+
+Unlike the service server, there can be arbitrary numbers of service clients using the same service name.
+
+### Actions
+## Table of Contents
+
+- [Action Server](#action_server)
+- [Action Client](#action_client)
+
+In ROS 2, an action refers to a long-running remote procedure call with feedback and the ability to cancel or preempt the goal. For instance, the high-level state machine running a robot may call an action to tell the navigation subsystem to travel to a waypoint, which may take several seconds (or minutes) to do. Along the way, the navigation subsystem can provide feedback on how far along it is, and the high-level state machine has the option to cancel or preempt the travel to that waypoint.
+
+This structure is reflected in how an action message definition looks:
+```
+int32 request
+---
+int32 response
+---
+int32 feedback
+```
+In ROS 2, actions are expected to be long running procedures, as there is overhead in setting up and monitoring the connection. If you need a short running remote procedure call, consider using a service instead.
+
+Actions are identified by an action name, which looks much like a topic name (but is in a different namespace).
+
+An action consists of two parts: the action server and the action client.
+
+### Action Server <a name="action_server"></a>
+The action server is the entity that will accept the remote procedure request and perform some procedure on it. It is also responsible for sending out feedback as the action progresses and should react to cancellation/preemption requests. For instance, consider an action to calculate the Fibonacci sequence with the following interface:
+
+```
+int32 order
+---
+int32[] sequence
+---
+int32[] sequence
+```
+The action server is the entity that receives this message, starts calculating the sequence up to `order` (providing feedback along the way), and finally returns a full result in `sequence`.
+
+**Note**
+There should only ever be one action server per action name. It is undefined which action server will receive client requests in the case of multiple action servers on the same action name.
+
+### Action Client <a name="action_client"></a>
+
+An action client is an entity that will request a remote action server to perform a procedure on its behalf. Following the example above, the action client is the entity that creates the initial message containing the `order`, and waits for the action server to compute the sequence and return it (with feedback along the way).
+
+Unlike the action server, there can be arbitrary numbers of action clients using the same action name.
+   
+### Parameters
+## Table of Contents
+
+- [Overview](#paramover)
+- [Parameters Background](#parambg)
+  - [Declaring parameters](#decparam)
+  - [Parameter types](#paramtypes)
+  - [Parameter callbacks](#paramcb)
+- [Interacting with parameters](#
+- Setting initial parameter values when running a node
+- Setting initial parameter values when launching nodes
+- Manipulating parameter values at runtime
+- Migrating from ROS 1
+
+### Overview
+Parameters in ROS 2 are associated with individual nodes. Parameters are used to configure nodes at startup (and during runtime), without changing the code. The lifetime of a parameter is tied to the lifetime of the node (though the node could implement some sort of persistence to reload values after restart).
+
+Parameters are addressed by node name, node namespace, parameter name, and parameter namespace. Providing a parameter namespace is optional.
+
+Each parameter consists of a key, a value, and a descriptor. The key is a string and the value is one of the following types: `bool`, `int64`, `float64`, `string`, `byte[]`, `bool[]`, `int64[]`, `float64[]` or `string[]`. By default all descriptors are empty, but can contain parameter descriptions, value ranges, type information, and additional constraints.
+
+For a hands-on tutorial with ROS parameters see [Understanding parameters](https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters.html).
+
+### Parameters Backgroud
+### Declaring Parameters
+By default, a node needs to declare all of the parameters that it will accept during its lifetime. This is so that the type and name of the parameters are well-defined at node startup time, which reduces the chances of misconfiguration later on. 
+
+For some types of nodes, not all of the parameters will be known ahead of time. In these cases, the node can be instantiated with `allow_undeclared_parameters` set to `true`, which will allow parameters to be get and set on the node even if they haven’t been declared.
+### Parameter Types
+Each parameter on a ROS 2 node has one of the pre-defined parameter types as mentioned in the Overview. By default, attempts to change the type of a declared parameter at runtime will fail. This prevents common mistakes, such as putting a boolean value into an integer parameter.
+
+If a parameter needs to be multiple different types, and the code using the parameter can handle it, this default behavior can be changed. When the parameter is declared, it should be declared using a `ParameterDescriptor` with the `dynamic_typing` member variable set to `true`.
+### Parameter Callbacks
+A ROS 2 node can register three different types of callbacks to be informed when changes are happening to parameters. All three of the callbacks are optional.
+
+The first is known as a “pre set parameter” callback, and can be set by calling `add_pre_set_parameters_callback` from the node API. This callback is passed a list of the `Parameter` objects that are being changed, and returns nothing. When it is called, it can modify the `Parameter` list to change, add, or remove entries. As an example, if `parameter2` should change anytime that `parameter1` changes, that can be implemented with this callback.
+
+The second is known as a “set parameter” callback, and can be set by calling `add_on_set_parameters_callback` from the node API. The callback is passed a list of immutable `Parameter` objects, and returns an `rcl_interfaces/msg/SetParametersResult`. The main purpose of this callback is to give the user the ability to inspect the upcoming change to the parameter and explicitly reject the change.
+
+**Note**
+
+It is important that “set parameter” callbacks have no side-effects. Since multiple “set parameter” callbacks can be chained, there is no way for an individual callback to know if a later callback will reject the update. If the individual callback were to make changes to the class it is in, for instance, it may get out-of-sync with the actual parameter. To get a callback after a parameter has been successfully changed, see the next type of callback below.
+
+The third type of callback is known as an “post set parameter” callback, and can be set by calling `add_post_set_parameters_callback` from the node API. The callback is passed a list of immutable `Parameter` objects, and returns nothing. The main purpose of this callback is to give the user the ability to react to changes from parameters that have successfully been accepted.
+
+### Interacting with Parameters
+
+ROS 2 nodes can perform parameter operations through node APIs as described in Using parameters in a class (C++) or Using parameters in a class (Python). External processes can perform parameter operations via parameter services that are created by default when a node is instantiated. The services that are created by default are:
+
+- `/node_name/describe_parameters`: Uses a service type of `rcl_interfaces/srv/DescribeParameters`. Given a list of parameter names, returns a list of descriptors associated with the parameters.
+
+- `/node_name/get_parameter_types`: Uses a service type of `rcl_interfaces/srv/GetParameterTypes`. Given a list of parameter names, returns a list of parameter types associated with the parameters.
+
+- `/node_name/get_parameters`: Uses a service type of `rcl_interfaces/srv/GetParameters`. Given a list of parameter names, returns a list of parameter values associated with the parameters.
+
+- `/node_name/list_parameters`: Uses a service type of `rcl_interfaces/srv/ListParameters`. Given an optional list of parameter prefixes, returns a list of the available parameters with that prefix. If the prefixes are empty, returns all parameters.
+
+- `/node_name/set_parameters`: Uses a service type of `rcl_interfaces/srv/SetParameters`. Given a list of parameter names and values, attempts to set the parameters on the node. Returns a list of results from trying to set each parameter; some of them may have succeeded and some may have failed.
+
+- `/node_name/set_parameters_atomically`: Uses a service type of `rcl_interfaces/srv/SetParametersAtomically`. Given a list of parameter names and values, attempts to set the parameters on the node. Returns a single result from trying to set all parameters, so if one failed, all of them failed.
+
+### Setting initial parameter values when running a node
+Initial parameter values can be set when running the node either through individual command-line arguments, or through YAML files. See Setting parameters directly from the command line for examples on how to set initial parameter values.
+
+### Setting initial parameter values when launching nodes
+Initial parameter values can also be set when running the node through the ROS 2 launch facility. See this document for information on how to specify parameters via launch.
+
+### Manipulating parameter values at runtime
+The `ros2 param` command is the general way to interact with parameters for nodes that are already running. `ros2 param` uses the parameter service API as described above to perform the various operations. See this how-to guide for details on how to use `ros2 param`.
+
+### Migrating from ROS 1
+The [Launch file migration guide](https://docs.ros.org/en/jazzy/How-To-Guides/Migrating-from-ROS1/Migrating-Launch-Files.html) explains how to migrate `param` and `rosparam` launch tags from ROS 1 to ROS 2.
+
+The [YAML parameter file migration guide](https://docs.ros.org/en/jazzy/How-To-Guides/Migrating-from-ROS1/Migrating-Parameters.html) explains how to migrate parameter files from ROS 1 to ROS 2.
+
+In ROS 1, the `roscore` acted like a global parameter blackboard where all nodes could get and set parameters. Since there is no central `roscore` in ROS 2, that functionality no longer exists. The recommended approach in ROS 2 is to use per-node parameters that are closely tied to the nodes that use them. If a global blackboard is still needed, it is possible to create a dedicated node for this purpose. ROS 2 ships with one in the `ros-jazzy-demo-nodes-cpp` package called `parameter_blackboard`; it can be run with:
+```
+ros2 run demo_nodes_cpp parameter_blackboard
+```
+The code for the `parameter_blackboard` is here.
+
+### Introspection with command line tools
+### Table of Contents
+- Usage
+- Example
+- Behind the Scenes
+- Implementation
+
+ROS 2 includes a suite of command-line tools for introspecting a ROS 2 system.
+
+### Usage
+The main entry point for the tools is the command `ros2`, which itself has various sub-commands for introspecting and working with nodes, topics, services, and more.
+
+To see all available sub-commands run:
+```
+ros2 --help
+```
+Examples of sub-commands that are available include:
+
+
+- `action`: Introspect/interact with ROS actions
+- `bag`: Record/play a rosbag
+- `component`: Manage component containers
+- `daemon`: Introspect/configure the ROS 2 daemon
+- `doctor`: Check ROS setup for potential issues
+- `interface`: Show information about ROS interfaces
+- `launch`: Run/introspect a launch file
+- `lifecycle`: Introspect/manage nodes with managed lifecycles
+- `multicast`: Multicast debugging commands
+- `node`: Introspect ROS nodes
+- `param`: Introspect/configure parameters on a node
+- `pkg`: Introspect ROS packages
+- `run`: Run ROS nodes
+- `security`: Configure security settings
+- `service`: Introspect/call ROS services
+- `test`: Run a ROS launch test
+- `topic`: Introspect/publish ROS topics
+- `trace`: Tracing tools to get information on ROS nodes execution (only available on Linux)
+- `wtf`: An alias for doctor
+
+### Example
+
+To produce the typical talker-listener example using command-line tools, the topic sub-command can be used to publish and echo messages on a `topic`.
+
+Publish messages in one terminal with:
+```
+$ ros2 topic pub /chatter std_msgs/msg/String "data: Hello world"
+publisher: beginning loop
+publishing #1: std_msgs.msg.String(data='Hello world')
+
+publishing #2: std_msgs.msg.String(data='Hello world')
+```
+Echo messages received in another terminal with:
+```
+$ ros2 topic echo /chatter
+data: Hello world
+
+data: Hello world
+```
+### Behind the scenes
+
+ROS 2 uses a distributed discovery process for nodes to connect to each other. As this process purposefully does not use a centralized discovery mechanism, it can take time for ROS nodes to discover all other participants in the ROS graph. Because of this, there is a long-running daemon in the background that stores information about the ROS graph to provide faster responses to queries, e.g. the list of node names.
+
+The daemon is automatically started when the relevant command-line tools are used for the first time. You can run `ros2 daemon --help` for more options for interacting with the daemon.
+
+### Implementation
+
+The source code for the `ros2 command` is available at https://github.com/ros2/ros2cli.
+
+The `ros2` tool has been implemented as a framework that can be extended via plugins. For example, the [sros2](https://github.com/ros2/sros2) package provides a `security` sub-command that is automatically detected by the `ros2` tool if the `sros2` package is installed.
+
+### Launch
+A ROS 2 system typically consists of many nodes running across many different processes (and even different machines). While it is possible to run each of these nodes separately, it gets cumbersome quite quickly.
+
+The launch system in ROS 2 is meant to automate the running of many nodes with a single command. It helps the user describe the configuration of their system and then executes it as described. The configuration of the system includes what programs to run, where to run them, what arguments to pass them, and ROS-specific conventions which make it easy to reuse components throughout the system by giving them each a different configuration. It is also responsible for monitoring the state of the processes launched, and reporting and/or reacting to changes in the state of those processes.
+
+All of the above is specified in a launch file, which can be written in Python, XML, or YAML. This launch file can then be run using the `ros2 launch` command, and all of the nodes specified will be run.
+
+The [design document](https://design.ros2.org/articles/roslaunch.html) details the goal of the design of ROS 2’s launch system (not all functionality is currently available).
 ### Installing OpenNi <a name="installing-openni"></a>
 
 1. Install the OpenNI package for ROS using the provided launch files.

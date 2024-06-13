@@ -1,0 +1,1170 @@
+<h1>ClearSpot AI - ROS2 Crash Course</h1>
+<h2>Table of Contents</h2>
+<ol>
+<li><p><a href="#introros2">Introduction to ROS 2</a></p>
+<ul>
+<li><a href="#introveriew">Overview of ROS 2</a></li>
+<li><a href="#diffr1r2">Differences between ROS 1 and ROS 2</a></li>
+<li><a href="#kfab">Key Features and Benefits</a></li>
+</ul>
+</li>
+<li><p><a href="#note">Note</a></p>
+</li>
+<li><p><a href="#background">Background</a></p>
+</li>
+<li><p><a href="#instl">Installation</a></p>
+<ul>
+<li><a href="#ubu">ubuntu</a></li>
+</ul>
+</li>
+<li><p><a href="#sde">Setting Up a Development Environment</a></p>
+<ul>
+<li><a href="#riat">Recommended IDEs and tools</a></li>
+<li><a href="#suvc">Setting up version control</a></li>
+<li><a href="#cbt">Configuring build tools</a></li>
+</ul>
+</li>
+<li><p><a href="#bc">Basic Concepts</a></p>
+<ul>
+<li><a href="#nodes">Nodes</a></li>
+<li><a href="#discovery">Discovery</a></li>
+<li><a href="#interfaces">Interfaces</a></li>
+<li><a href="#topics">Topics</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#actions">Actions</a></li>
+<li><a href="#parameters">Parameters</a></li>
+<li><a href="#intros">Introspection with command line tools</a></li>
+<li><a href="#launch">Launch</a></li>
+<li><a href="#clilib">Client libraries</a></li>
+</ul>
+</li>
+<li><p><a href="#inter">Intermediate Concepts</a></p>
+<ul>
+<li><a href="#rosdom">The ROS_DOMAIN_ID</a></li>
+<li><a href="#interdif">Different ROS 2 middleware vendors</a></li>
+<li><a href="#interlog">Logging and logger configuration</a></li>
+</ul>
+</li>
+<li><p><a href="#addref">Additional Reference Materials</a></p>
+</li>
+<li><p><a href="#oa">Project Submission</a></p>
+</li>
+<li><p><a href="#hoe">Hands-On Exercises</a></p>
+</li>
+</ol>
+<h2>1. Introduction to ROS 2 <a name="introros2"></a></h2>
+<h3>Overview of ROS 2 <a name="introveriew"></a></h3>
+<p>ROS 2 (Robot Operating System 2) is an open-source framework for building robot applications. It provides the tools, libraries, and conventions needed to create complex and robust robot behaviors. ROS 2 is a significant improvement over its predecessor, ROS 1, with a focus on addressing the limitations and challenges faced by developers in ROS 1.</p>
+<h3>Differences between ROS 1 and ROS 2 <a name="diffr1r2"></a></h3>
+<p>Next, Let&#39;s see the differences between ROS 1 and ROS 2.</p>
+<h4>Differences Between ROS 1 and ROS 2</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>ROS 1</th>
+<th>ROS 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Middleware</strong></td>
+<td>Custom-built middleware</td>
+<td>DDS (Data Distribution Service)</td>
+</tr>
+<tr>
+<td><strong>Real-Time Capabilities</strong></td>
+<td>Limited support</td>
+<td>Designed for real-time applications</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Basic security measures</td>
+<td>Advanced security (encryption, access control)</td>
+</tr>
+<tr>
+<td><strong>Platform Support</strong></td>
+<td>Primarily Ubuntu</td>
+<td>Cross-platform (Ubuntu, Windows, macOS)</td>
+</tr>
+<tr>
+<td><strong>Communication</strong></td>
+<td>Custom protocols</td>
+<td>Standardized DDS protocols with QoS settings</td>
+</tr>
+<tr>
+<td><strong>Modularity</strong></td>
+<td>Less modular</td>
+<td>Highly modular</td>
+</tr>
+<tr>
+<td><strong>Multi-Robot Support</strong></td>
+<td>Limited</td>
+<td>Improved support for multi-robot systems</td>
+</tr>
+<tr>
+<td><strong>Tooling</strong></td>
+<td>Basic debugging and visualization tools</td>
+<td>Advanced tools for debugging, simulation, and visualization (e.g., Gazebo, RViz)</td>
+</tr>
+<tr>
+<td><strong>Package Management</strong></td>
+<td><code>catkin</code> build system</td>
+<td><code>colcon</code> build tool</td>
+</tr>
+<tr>
+<td><strong>Community and Ecosystem</strong></td>
+<td>Extensive community with many packages</td>
+<td>Growing community with modernized packages</td>
+</tr>
+<tr>
+<td><strong>Launch System</strong></td>
+<td>XML-based launch files</td>
+<td>Python-based launch files</td>
+</tr>
+<tr>
+<td><strong>Node Lifecycle Management</strong></td>
+<td>Limited support</td>
+<td>Full node lifecycle management</td>
+</tr>
+<tr>
+<td><strong>Parameter Handling</strong></td>
+<td>Basic parameter server</td>
+<td>Enhanced parameter handling</td>
+</tr>
+<tr>
+<td><strong>Quality of Service (QoS)</strong></td>
+<td>Not available</td>
+<td>Customizable QoS policies</td>
+</tr>
+<tr>
+<td><strong>Networking</strong></td>
+<td>Custom networking setup</td>
+<td>Native support for multi-host networking</td>
+</tr>
+<tr>
+<td><strong>Dependency Management</strong></td>
+<td>Manual handling</td>
+<td>Improved dependency management</td>
+</tr>
+</tbody></table>
+<h3>Key Features and Benefits <a name="kfab"></a></h3>
+<ol>
+<li><p><strong>Middleware Abstraction</strong>:</p>
+<ul>
+<li><strong>DDS (Data Distribution Service)</strong>: ROS 2 uses DDS, a standard for real-time data communication, which enhances performance, reliability, and scalability.</li>
+<li><strong>Quality of Service (QoS)</strong>: Customizable QoS policies allow for fine-tuned control over communication, essential for real-time and critical applications.</li>
+</ul>
+</li>
+<li><p><strong>Real-Time Support</strong>:</p>
+<ul>
+<li>ROS 2 is designed with real-time systems in mind, enabling developers to build applications that require deterministic behavior and timely execution.</li>
+</ul>
+</li>
+<li><p><strong>Security</strong>:</p>
+<ul>
+<li>Enhanced security features include secure communication, authentication, and encryption, ensuring that robotic systems can be protected against various threats.</li>
+</ul>
+</li>
+<li><p><strong>Cross-Platform Compatibility</strong>:</p>
+<ul>
+<li>ROS 2 supports multiple operating systems, including Ubuntu, Windows, and macOS, making it more versatile and accessible to a wider range of developers and use cases.</li>
+</ul>
+</li>
+<li><p><strong>Modular and Flexible Architecture</strong>:</p>
+<ul>
+<li>ROS 2 offers a modular architecture that allows developers to use only the components they need, making it easier to integrate with other systems and technologies.</li>
+</ul>
+</li>
+<li><p><strong>Improved Tooling</strong>:</p>
+<ul>
+<li>Advanced tools for debugging, simulation (such as Gazebo), and visualization (such as RViz) enhance the development process, making it more efficient and effective.</li>
+</ul>
+</li>
+<li><p><strong>Better Support for Multi-Robot Systems</strong>:</p>
+<ul>
+<li>ROS 2 includes features that simplify the development and deployment of multi-robot systems, including improved communication and coordination mechanisms.</li>
+</ul>
+</li>
+</ol>
+<h2>3. Background <a name="background"></a></h2>
+<p>In order to understand the significance and evolution of ROS 2, it&#39;s helpful to have some context about the origins and development of the Robot Operating System (ROS) ecosystem.</p>
+<h3>Evolution of ROS 1</h3>
+<p>ROS 1 was introduced in 2007 by researchers at Willow Garage as a flexible framework for robotic software development. It quickly gained popularity due to its open-source nature, modular architecture, and rich set of libraries and tools. ROS 1 revolutionized the way robotic systems were developed by providing a standardized platform for sharing code, building complex behaviors, and integrating sensors and actuators.</p>
+<p>Over the years, ROS 1 grew into a vibrant ecosystem with a large community of developers contributing packages, libraries, and tools for various robotic applications. However, as robotic systems became more complex and diverse, several limitations of ROS 1 became apparent, prompting the need for a more advanced and scalable framework.</p>
+<h3>Development of ROS 2</h3>
+<p>The development of ROS 2 began in 2013 as a collaboration between various organizations and individuals within the ROS community. The goal was to address the shortcomings of ROS 1 and to create a framework that could meet the requirements of modern robotic applications.</p>
+<p>ROS 2 was designed with a focus on reliability, scalability, and real-time performance, making it suitable for a wide range of applications, from research and academia to industrial automation and commercial robotics. By adopting new technologies and standards, such as the Data Distribution Service (DDS) for communication and improved security features, ROS 2 offers significant improvements over its predecessor.</p>
+<h3>Adoption and Future Outlook</h3>
+<p>Since its initial release, ROS 2 has gained momentum within the robotics community, with an increasing number of projects and applications migrating from ROS 1 to ROS 2. The ROS 2 ecosystem continues to grow, with ongoing development efforts focused on enhancing performance, expanding platform support, and improving developer experience.</p>
+<p>As the field of robotics continues to evolve, ROS 2 is expected to play a central role in shaping the future of robotic software development. Its modular architecture, cross-platform compatibility, and advanced features make it a powerful tool for building the next generation of robotic systems.</p>
+<h2>4. Installation <a name="instl"></a></h2>
+<p>Jazzy Jalisco is primarily supported on the following platforms:</p>
+<h3>Tier 1 platforms:</h3>
+<ul>
+<li><p>Ubuntu 24.04 (Noble): amd64 and arm64</p>
+</li>
+<li><p>Windows 10 (Visual Studio 2019): amd64</p>
+</li>
+</ul>
+<h3>Tier 2 platforms:</h3>
+<ul>
+<li>RHEL 9: amd64</li>
+</ul>
+<h3>Tier 3 platforms:</h3>
+<ul>
+<li><p>macOS: amd64</p>
+</li>
+<li><p>Debian Bookworm: amd64</p>
+</li>
+</ul>
+<h2>Ubuntu Installation <a name="ubu"></a></h2>
+<h3>Set Locale</h3>
+<p>Make sure you have a locale which supports <code>UTF-8</code>. If you are in a minimal environment (such as a docker container), the locale may be something minimal like <code>POSIX</code>. We test with the following settings. However, it should be fine if you’re using a different UTF-8 supported locale.</p>
+<pre><code class="language-bash">locale  # check for UTF-8
+
+sudo apt update &amp;&amp; sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+locale  # verify settings
+</code></pre>
+<h3>Enable Required Repositories</h3>
+<p>You will need to add the ROS 2 apt repository to your system.</p>
+<p>First ensure that the <a href="https://help.ubuntu.com/community/Repositories/Ubuntu">Ubuntu Universe repository</a> is enabled.</p>
+<pre><code class="language-bash">sudo apt install software-properties-common
+sudo add-apt-repository universe
+</code></pre>
+<p>Now add the ROS 2 GPG key with apt.</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install curl -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+</code></pre>
+<p>Then add the repository to your source list.</p>
+<pre><code class="language-bash">echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release &amp;&amp; echo $UBUNTU_CODENAME) main&quot; | sudo tee /etc/apt/sources.list.d/ros2.list &gt; /dev/null
+</code></pre>
+<h3>Install development tools (optional)</h3>
+<p>If you are going to build ROS packages or otherwise do development, you can also install the development tools:</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install ros-dev-tools
+</code></pre>
+<h3>Install ROS 2</h3>
+<p>Update your apt repository caches after setting up the repositories.</p>
+<pre><code class="language-bash">sudo apt update
+</code></pre>
+<p>ROS 2 packages are built on frequently updated Ubuntu systems. It is always recommended that you ensure your system is up to date before installing new packages.</p>
+<pre><code class="language-bash">sudo apt upgrade
+</code></pre>
+<p>Desktop Install (Recommended): ROS, RViz, demos, tutorials.</p>
+<pre><code class="language-bash">sudo apt install ros-jazzy-desktop
+</code></pre>
+<h3>Setup environment</h3>
+<p>Set up your environment by sourcing the following file.</p>
+<pre><code class="language-bash"># Replace &quot;.bash&quot; with your shell if you&#39;re not using bash
+# Possible values are: setup.bash, setup.sh, setup.zsh
+source /opt/ros/jazzy/setup.bash
+</code></pre>
+<h3>Try Some Examples</h3>
+<p>If you installed <code>ros-jazzy-desktop</code> above you can try some examples.</p>
+<p>In one terminal, source the setup file and then run a <code>C++ talker</code>:</p>
+<pre><code class="language-bash">source /opt/ros/jazzy/setup.bash
+ros2 run demo_nodes_cpp talker
+</code></pre>
+<p>In another terminal source the setup file and then run a <code>Python listener</code>:</p>
+<pre><code class="language-bash">source /opt/ros/jazzy/setup.bash
+ros2 run demo_nodes_py listener
+</code></pre>
+<p>You should see the <code>talker</code> saying that it’s <code>Publishing</code> messages and the <code>listener</code> saying <code>I heard</code> those messages. This verifies both the C++ and Python APIs are working properly. Hooray!</p>
+<h2>5. Setting Up a Development Environment <a name="sde"></a></h2>
+<p>Setting up a development environment for ROS 2 involves configuring your system to build and develop ROS packages. This section provides instructions for installing the necessary tools and configuring your environment.</p>
+<h3>Recommended IDEs and Tools <a name="riat"></a></h3>
+<p>While ROS 2 development can be done using any text editor and terminal, using an Integrated Development Environment (IDE) can greatly enhance productivity. Here are some recommended IDEs and tools for ROS 2 development:</p>
+<ul>
+<li><strong>Visual Studio Code</strong>: A popular and lightweight IDE with built-in support for CMake, Python, and many other programming languages. Install the &quot;ROS&quot; extension for ROS-specific features.</li>
+<li><strong>CLion</strong>: A powerful IDE developed by JetBrains, with advanced C++ support and seamless integration with CMake. Install the &quot;ROS Support&quot; plugin for ROS development.</li>
+<li><strong>Eclipse</strong>: A versatile IDE with support for C/C++ development. Install the &quot;ROS Eclipse&quot; plugin for ROS development.</li>
+</ul>
+<p>Additionally, consider installing the following tools to streamline your development workflow:</p>
+<ul>
+<li><strong>Git</strong>: Version control system for managing your ROS packages and collaborating with others.</li>
+<li><strong>CMake</strong>: Build system used by ROS to compile packages.</li>
+<li><strong>Python</strong>: Programming language commonly used for ROS nodes and scripts.</li>
+<li><strong>Gazebo</strong>: Robot simulation environment for testing and debugging robotic applications.</li>
+</ul>
+<h3>Setting Up Version Control <a name="suvc"></a></h3>
+<p>If you haven&#39;t already, install Git on your system to manage your ROS packages using version control. You can install Git using your system&#39;s package manager:</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install git
+</code></pre>
+<p>Once Git is installed, configure your username and email address:</p>
+<pre><code class="language-bash">git config --global user.name &quot;Your Name&quot;
+git config --global user.email &quot;your.email@example.com&quot;
+</code></pre>
+<h3>Configuring Build Tools <a name="cbt"></a></h3>
+<p>ROS 2 packages use CMake as the build system. Make sure you have CMake installed on your system:</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install cmake
+</code></pre>
+<p>Additionally, ROS 2 provides development tools for building and managing packages. You can install these tools using the following command:</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install ros-dev-tools
+</code></pre>
+<p>These tools include essential utilities for ROS 2 development, such as <code>rosdep</code> for managing package dependencies, <code>colcon</code> for building packages, and <code>ament_lint</code> for code quality checks.</p>
+<p>With your development environment set up, you&#39;re ready to start building and developing ROS 2 packages. Use your preferred IDE or text editor to create and modify ROS nodes, and leverage the ROS tools for building, testing, and debugging your applications.</p>
+<h2>6. Basic Concepts <a name="bc"></a></h2>
+<h3>Nodes <a name="nodes"></a></h3>
+<p>A node is a participant in the ROS 2 graph, which uses a client library to communicate with other nodes. Nodes can communicate with other nodes within the same process, in a different process, or on a different machine. Nodes are typically the unit of computation in a ROS graph; each node should do one logical thing.</p>
+<p>Nodes can publish to named topics to deliver data to other nodes, or subscribe to named topics to get data from other nodes. They can also act as a service client to have another node perform a computation on their behalf, or as a service server to provide functionality to other nodes. For long-running computations, a node can act as an action client to have another node perform it on their behalf, or as an action server to provide functionality to other nodes. Nodes can provide configurable parameters to change behavior during run-time.</p>
+<p>Nodes are often a complex combination of publishers, subscribers, service servers, service clients, action servers, and action clients, all at the same time.</p>
+<p>Connections between nodes are established through a distributed discovery process.</p>
+<h3>Discovery <a name="discovery"></a></h3>
+<p>Discovery of nodes happens automatically through the underlying middleware of ROS 2. It can be summarized as follows:</p>
+<ol>
+<li><p>When a node is started, it advertises its presence to other nodes on the network with the same ROS domain (set with the ROS_DOMAIN_ID environment variable). Nodes respond to this advertisement with information about themselves so that the appropriate connections can be made and the nodes can communicate.</p>
+</li>
+<li><p>Nodes periodically advertise their presence so that connections can be made with new-found entities, even after the initial discovery period.</p>
+</li>
+<li><p>Nodes advertise to other nodes when they go offline.</p>
+</li>
+</ol>
+<p>Nodes will only establish connections with other nodes if they have compatible Quality of Service settings.</p>
+<p>Take the talker-listener demo for example. Running the C++ talker node in one terminal will publish messages on a topic, and the Python listener node running in another terminal will subscribe to messages on the same topic.</p>
+<p>You should see that these nodes discover each other automatically, and begin to exchange messages.</p>
+<h3>Interfaces <a name="interfaces"></a></h3>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#ibg">Background</a></li>
+<li><a href="#imsg">Messages</a><ul>
+<li><a href="#ifields">Fields</a><ul>
+<li><a href="#ifieldtypes">Field types</a></li>
+<li><a href="#ifieldnames">Field names</a></li>
+<li><a href="#ifielddefval">Field default value</a></li>
+</ul>
+</li>
+<li><a href="#iconst">Constants</a></li>
+</ul>
+</li>
+<li><a href="#iservices">Services</a></li>
+<li><a href="#iactions">Actions</a></li>
+</ul>
+<h3>Background <a name="ibg"></a></h3>
+<p>ROS applications typically communicate through interfaces of one of three types: topics, services, or actions. ROS 2 uses a simplified description language, the interface definition language (IDL), to describe these interfaces. This description makes it easy for ROS tools to automatically generate source code for the interface type in several target languages.</p>
+<p>In this document we will describe the supported types:</p>
+<p>msg: <code>.msg</code> files are simple text files that describe the fields of a ROS message. They are used to generate source code for messages in different languages.</p>
+<p>srv: <code>.srv</code> files describe a service. They are composed of two parts: a request and a response. The request and response are message declarations.</p>
+<p>action: <code>.action</code> files describe actions. They are composed of three parts: a goal, a result, and feedback. Each part is a message declaration itself.</p>
+<h3>Messages <a name="imsg"></a></h3>
+<p>Messages are a way for a ROS 2 node to send data on the network to other ROS nodes, with no response expected. For instance, if a ROS 2 node reads temperature data from a sensor, it can then publish that data on the ROS 2 network using a <code>Temperature</code> message. Other nodes on the ROS 2 network can subscribe to that data and receive the <code>Temperature</code> message.</p>
+<p>Messages are described and defined in <code>.msg</code> files in the <code>msg/</code> directory of a ROS package. <code>.msg</code> files are composed of two parts: fields and constants.</p>
+<h3>Fields <a name="ifields"></a></h3>
+<p>Each field consists of a type and a name, separated by a space, i.e:</p>
+<pre><code class="language-bash">fieldtype1 fieldname1
+fieldtype2 fieldname2
+fieldtype3 fieldname3
+</code></pre>
+<p>For example:</p>
+<pre><code class="language-bash">int32 my_int
+string my_string
+</code></pre>
+<h3>Field Types <a name="ifieldtypes"></a></h3>
+<p>Field types can be:</p>
+<ul>
+<li><p>a built-in-type</p>
+</li>
+<li><p>names of Message descriptions defined on their own, such as “geometry_msgs/PoseStamped”</p>
+</li>
+</ul>
+<p>Built-in-types currently supported:</p>
+<table>
+<thead>
+<tr>
+<th>Type Name</th>
+<th>C++</th>
+<th>Python</th>
+<th>DDS Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bool</td>
+<td>bool</td>
+<td>bool</td>
+<td>builtins.bool</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>uint8_t</td>
+<td>builtins.bytes*</td>
+<td>octet</td>
+</tr>
+<tr>
+<td>char</td>
+<td>char</td>
+<td>builtins.int*</td>
+<td>char</td>
+</tr>
+<tr>
+<td>float32</td>
+<td>float</td>
+<td>builtins.float*</td>
+<td>float</td>
+</tr>
+<tr>
+<td>float64</td>
+<td>double</td>
+<td>builtins.float*</td>
+<td>double</td>
+</tr>
+<tr>
+<td>int8</td>
+<td>int8_t</td>
+<td>builtins.int*</td>
+<td>octet</td>
+</tr>
+<tr>
+<td>uint8</td>
+<td>uint8_t</td>
+<td>builtins.int*</td>
+<td>octet</td>
+</tr>
+<tr>
+<td>int16</td>
+<td>int16_t</td>
+<td>builtins.int*</td>
+<td>short</td>
+</tr>
+<tr>
+<td>uint16</td>
+<td>uint16_t</td>
+<td>builtins.int*</td>
+<td>unsigned short</td>
+</tr>
+<tr>
+<td>int32</td>
+<td>int32_t</td>
+<td>builtins.int*</td>
+<td>long</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>uint32_t</td>
+<td>builtins.int*</td>
+<td>unsigned long</td>
+</tr>
+<tr>
+<td>int64</td>
+<td>int64_t</td>
+<td>builtins.int*</td>
+<td>long long</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>uint64_t</td>
+<td>builtins.int*</td>
+<td>unsigned long long</td>
+</tr>
+<tr>
+<td>string</td>
+<td>std::string</td>
+<td>builtins.str</td>
+<td>string</td>
+</tr>
+<tr>
+<td>wstring</td>
+<td>std::u16string</td>
+<td>builtins.str</td>
+<td>wstring</td>
+</tr>
+</tbody></table>
+<p>Every built-in-type can be used to define arrays:</p>
+<table>
+<thead>
+<tr>
+<th>Type Name</th>
+<th>C++</th>
+<th>Python</th>
+<th>DDS Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>static array</td>
+<td>std::array&lt;T, N&gt;</td>
+<td>builtins.list*</td>
+<td>T[N]</td>
+</tr>
+<tr>
+<td>unbounded dynamic array</td>
+<td>std::vector<T></td>
+<td>builtins.list</td>
+<td>sequence</td>
+</tr>
+<tr>
+<td>bounded dynamic array</td>
+<td>custom_class&lt;T, N&gt;</td>
+<td>builtins.list*</td>
+<td>sequence&lt;T, N&gt;</td>
+</tr>
+<tr>
+<td>bounded string</td>
+<td>std::string</td>
+<td>builtins.str*</td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p>All types that are more permissive than their ROS definition enforce the ROS constraints in range and length by software.</p>
+<p>Example of message definition using arrays and bounded types:</p>
+<pre><code>int32[] unbounded_integer_array
+int32[5] five_integers_array
+int32[&lt;=5] up_to_five_integers_array
+
+string string_of_unbounded_size
+string&lt;=10 up_to_ten_characters_string
+
+string[&lt;=5] up_to_five_unbounded_strings
+string&lt;=10[] unbounded_array_of_strings_up_to_ten_characters_each
+string&lt;=10[&lt;=5] up_to_five_strings_up_to_ten_characters_each
+</code></pre>
+<h3>Field Names <a name="ifieldnames"></a></h3>
+<p>Field names must be lowercase alphanumeric characters with underscores for separating words. They must start with an alphabetic character, and they must not end with an underscore or have two consecutive underscores.</p>
+<h3>Field Default Value <a name="ifielddefval"></a></h3>
+<p>Default values can be set to any field in the message type. Currently default values are not supported for string arrays and complex types (i.e. types not present in the built-in-types table above; that applies to all nested messages).</p>
+<p>Defining a default value is done by adding a third element to the field definition line, i.e:</p>
+<pre><code>fieldtype fieldname fielddefaultvalue
+</code></pre>
+<p>For example:</p>
+<pre><code>uint8 x 42
+int16 y -2000
+string full_name &quot;John Doe&quot;
+int32[] samples [-200, -100, 0, 100, 200]
+</code></pre>
+<p><strong>Note :</strong></p>
+<ul>
+<li><p>string values must be defined in single &#39; or double &quot; quotes</p>
+</li>
+<li><p>currently string values are not escaped</p>
+</li>
+</ul>
+<h3>Constants <a name="iconst"></a></h3>
+<p>Each constant definition is like a field description with a default value, except that this value can never be changed programatically. This value assignment is indicated by use of an equal ‘=’ sign, e.g.</p>
+<pre><code>constanttype CONSTANTNAME=constantvalue
+</code></pre>
+<p>For Example :</p>
+<pre><code>int32 X=123
+int32 Y=-123
+string FOO=&quot;foo&quot;
+string EXAMPLE=&#39;bar&#39;
+</code></pre>
+<p><strong>Note :</strong></p>
+<ul>
+<li>Constants names have to be UPPERCASE</li>
+</ul>
+<h3>Services <a name="iservices"></a></h3>
+<p>Services are a request/response communication, where the client (requester) is waiting for the server (responder) to make a short computation and return a result.</p>
+<p>Services are described and defined in <code>.srv</code> files in the <code>srv/</code> directory of a ROS package.</p>
+<p>A service description file consists of a request and a response msg type, separated by <code>---</code>. Any two <code>.msg</code> files concatenated with a <code>---</code> are a legal service description.</p>
+<p>Here is a very simple example of a service that takes in a string and returns a string:</p>
+<pre><code>string str
+---
+string str
+</code></pre>
+<p>We can of course get much more complicated (if you want to refer to a message from the same package you must not mention the package name):</p>
+<pre><code># request constants
+int8 FOO=1
+int8 BAR=2
+# request fields
+int8 foobar
+another_pkg/AnotherMessage msg
+---
+# response constants
+uint32 SECRET=123456
+# response fields
+another_pkg/YetAnotherMessage val
+CustomMessageDefinedInThisPackage value
+uint32 an_integer
+</code></pre>
+<p>You cannot embed another service inside of a service.</p>
+<h3>Actions <a name="iactions"></a></h3>
+<p>Actions are a long-running request/response communication, where the action client (requester) is waiting for the action server (the responder) to take some action and return a result. In contrast to services, actions can be long-running (many seconds or minutes), provide feedback while they are happening, and can be interrupted.</p>
+<p>Action definitions have the following form:</p>
+<pre><code>&lt;request_type&gt; &lt;request_fieldname&gt;
+---
+&lt;response_type&gt; &lt;response_fieldname&gt;
+---
+&lt;feedback_type&gt; &lt;feedback_fieldname&gt;
+</code></pre>
+<p>Like services, the request fields are before and the response fields are after the first triple-dash <code>(---)</code>, respectively. There is also a third set of fields after the second triple-dash, which is the fields to be sent when sending feedback.</p>
+<p>There can be arbitrary numbers of request fields (including zero), arbitrary numbers of response fields (including zero), and arbitrary numbers of feedback fields (including zero).</p>
+<p>The <code>&lt;request_type&gt;</code>, <code>&lt;response_type&gt;</code>, and <code>&lt;feedback_type&gt;</code> follow all of the same rules as the <code>&lt;type&gt;</code> for a message. The <code>&lt;request_fieldname&gt;</code>, <code>&lt;response_fieldname&gt;</code>, and <code>&lt;feedback_fieldname&gt;</code> follow all of the same rules as the <code>&lt;fieldname&gt;</code> for a message.</p>
+<p>For instance, the <code>Fibonacci</code> action definition contains the following:</p>
+<pre><code>int32 order
+---
+int32[] sequence
+---
+int32[] sequence
+</code></pre>
+<p>This is an action definition where the action client is sending a single <code>int32</code> field representing the number of Fibonacci steps to take, and expecting the action server to produce an array of <code>int32</code> containing the complete steps. Along the way, the action server may also provide an intermediate array of <code>int32</code> containing the steps accomplished up until a certain point.</p>
+<h3>Topics <a name="topics"></a></h3>
+<p><strong>Table of Contents</strong></p>
+<ul>
+<li><a href="#pub">Publish/Subscribe</a></li>
+<li><a href="#anon">Anonymous</a></li>
+<li><a href="#strong">Strongly-typed</a></li>
+</ul>
+<p>Topics are one of the three primary styles of interfaces provided by ROS 2. Topics should be used for continuous data streams, like sensor data, robot state, etc.</p>
+<p>As stated earlier, ROS 2 is a strongly-typed, anonymous publish/subscribe system. Let’s break down that sentence and explain it a bit more.</p>
+<h3>Publish/Subscribe <a name="pub"></a></h3>
+<p>A publish/subscribe system is one in which there are producers of data (publishers) and consumers of data (subscribers). The publishers and subscribers know how to contact each other through the concept of a “topic”, which is a common name so that the entites can find each other. For instance, when you create a publisher, you must also give it a string that is the name of the topic; the same goes for the subscriber. Any publishers and subscribers that are on the same topic name can directly communicate with each other. There may be zero or more publishers and zero or more subscribers on any particular topic. When data is published to the topic by any of the publishers, all subscribers in the system will receive the data. This system is also known as a “bus”, since it somewhat resembles a device bus from electrical engineering. This concept of a bus is part of what makes ROS 2 a powerful and flexible system. Publishers and subscribers can come and go as needed, meaning that debugging and introspection are natural extensions to the system. For instance, if you want to record data, you can use the <code>ros2 bag record</code> command. Under the hood, <code>ros2 bag record</code> creates a new subscriber to whatever topic you tell it, without interrupting the flow of data to the other parts of the system.</p>
+<h3>Anonymous <a name="anon"></a></h3>
+<p>Another fact mentioned in the introduction is that ROS 2 is “anonymous”. This means that when a subscriber gets a piece of data, it doesn’t generally know or care which publisher originally sent it (though it can find out if it wants). The benefit to this architecture is that publishers and subscribers can be swapped out at will without affecting the rest of the system.</p>
+<h3>Strongly Typed <a name="strong"></a></h3>
+<p>Finally, the introduction also mentioned that the publish/subscribe system is “strongly-typed”. That has two meanings in this context:</p>
+<ol>
+<li>The types of each field in a ROS message are typed, and that type is enforced at various levels. For instance, if the ROS message contains:<pre><code>uint32 field1
+string field2
+</code></pre>
+ Then the code will ensure that <code>field1</code> is always an unsigned integer and that <code>field2</code> is always a string.</li>
+<li>The semantics of each field are well-defined. There is no automated mechanism to ensure this, but all of the core ROS types have strong semantics associated with them. For instance, the IMU message contains a 3-dimensional vector for the measured angular velocity, and each of the dimensions is specified to be in radians/second. Other interpretations should not be placed into the message.</li>
+</ol>
+<h3>Services <a name="services"></a></h3>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#service_server">Service Server</a></li>
+<li><a href="#service_client">Service Client</a></li>
+</ul>
+<p>In ROS 2, a service refers to a remote procedure call. In other words, a node can make a remote procedure call to another node which will do a computation and return a result.</p>
+<p>This structure is reflected in how a service message definition looks:</p>
+<pre><code>uint32 request
+---
+uint32 response
+</code></pre>
+<p>In ROS 2, services are expected to return quickly, as the client is generally waiting on the result. Services should never be used for longer running processes, in particular processes that might need to be preempted for exceptional situations. If you have a service that will be doing a long-running computation, consider using an action instead.</p>
+<p>Services are identified by a service name, which looks much like a topic name (but is in a different namespace).</p>
+<p>A service consists of two parts: the service server and the service client.</p>
+<h3>Service Server <a name="service_server"></a></h3>
+<p>A service server is the entity that will accept a remote procedure request, and perform some computation on it. For instance, suppose the ROS 2 message contains the following:</p>
+<pre><code>uint32 a
+uint32 b
+---
+uint32 sum
+</code></pre>
+<p>The service server would be the entity that receives this message, adds <code>a</code> and <code>b</code> together, and returns the <code>sum</code>.</p>
+<p><strong>Note</strong>
+There should only ever be one service server per service name. It is undefined which service server will receive client requests in the case of multiple service servers on the same service name.</p>
+<h3>Service Client <a name="service_client"></a></h3>
+<p>A service client is an entity that will request a remote service server to perform a computation on its behalf. Following from the example above, the service client is the entity that creates the initial message containing <code>a</code> and <code>b</code>, and waits for the service server to compute the sum and return the result.</p>
+<p>Unlike the service server, there can be arbitrary numbers of service clients using the same service name.</p>
+<h3>Actions <a name="actions"></a></h3>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#action_server">Action Server</a></li>
+<li><a href="#action_client">Action Client</a></li>
+</ul>
+<p>In ROS 2, an action refers to a long-running remote procedure call with feedback and the ability to cancel or preempt the goal. For instance, the high-level state machine running a robot may call an action to tell the navigation subsystem to travel to a waypoint, which may take several seconds (or minutes) to do. Along the way, the navigation subsystem can provide feedback on how far along it is, and the high-level state machine has the option to cancel or preempt the travel to that waypoint.</p>
+<p>This structure is reflected in how an action message definition looks:</p>
+<pre><code>int32 request
+---
+int32 response
+---
+int32 feedback
+</code></pre>
+<p>In ROS 2, actions are expected to be long running procedures, as there is overhead in setting up and monitoring the connection. If you need a short running remote procedure call, consider using a service instead.</p>
+<p>Actions are identified by an action name, which looks much like a topic name (but is in a different namespace).</p>
+<p>An action consists of two parts: the action server and the action client.</p>
+<h3>Action Server <a name="action_server"></a></h3>
+<p>The action server is the entity that will accept the remote procedure request and perform some procedure on it. It is also responsible for sending out feedback as the action progresses and should react to cancellation/preemption requests. For instance, consider an action to calculate the Fibonacci sequence with the following interface:</p>
+<pre><code>int32 order
+---
+int32[] sequence
+---
+int32[] sequence
+</code></pre>
+<p>The action server is the entity that receives this message, starts calculating the sequence up to <code>order</code> (providing feedback along the way), and finally returns a full result in <code>sequence</code>.</p>
+<p><strong>Note</strong>
+There should only ever be one action server per action name. It is undefined which action server will receive client requests in the case of multiple action servers on the same action name.</p>
+<h3>Action Client <a name="action_client"></a></h3>
+<p>An action client is an entity that will request a remote action server to perform a procedure on its behalf. Following the example above, the action client is the entity that creates the initial message containing the <code>order</code>, and waits for the action server to compute the sequence and return it (with feedback along the way).</p>
+<p>Unlike the action server, there can be arbitrary numbers of action clients using the same action name.</p>
+<h3>Parameters <a name="parameters"></a></h3>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#paramover">Overview</a></li>
+<li><a href="#parambg">Parameters Background</a><ul>
+<li><a href="#decparam">Declaring parameters</a></li>
+<li><a href="#paramtypes">Parameter types</a></li>
+<li><a href="#paramcb">Parameter callbacks</a></li>
+</ul>
+</li>
+<li><a href="#paramint">Interacting with parameters</a></li>
+<li><a href="#paramsetr">Setting initial parameter values when running a node</a></li>
+<li><a href="#paramsetl">Setting initial parameter values when launching nodes</a></li>
+<li><a href="#parammani">Manipulating parameter values at runtime</a></li>
+<li><a href="#parammig">Migrating from ROS 1</a></li>
+</ul>
+<h3>Overview <a name="paramover"></a></h3>
+<p>Parameters in ROS 2 are associated with individual nodes. Parameters are used to configure nodes at startup (and during runtime), without changing the code. The lifetime of a parameter is tied to the lifetime of the node (though the node could implement some sort of persistence to reload values after restart).</p>
+<p>Parameters are addressed by node name, node namespace, parameter name, and parameter namespace. Providing a parameter namespace is optional.</p>
+<p>Each parameter consists of a key, a value, and a descriptor. The key is a string and the value is one of the following types: <code>bool</code>, <code>int64</code>, <code>float64</code>, <code>string</code>, <code>byte[]</code>, <code>bool[]</code>, <code>int64[]</code>, <code>float64[]</code> or <code>string[]</code>. By default all descriptors are empty, but can contain parameter descriptions, value ranges, type information, and additional constraints.</p>
+<p>For a hands-on tutorial with ROS parameters see <a href="https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters.html">Understanding parameters</a>.</p>
+<h3>Parameters Backgroud <a name="parambg"></a></h3>
+<h3>Declaring Parameters <a name="decparam"></a></h3>
+<p>By default, a node needs to declare all of the parameters that it will accept during its lifetime. This is so that the type and name of the parameters are well-defined at node startup time, which reduces the chances of misconfiguration later on. </p>
+<p>For some types of nodes, not all of the parameters will be known ahead of time. In these cases, the node can be instantiated with <code>allow_undeclared_parameters</code> set to <code>true</code>, which will allow parameters to be get and set on the node even if they haven’t been declared.</p>
+<h3>Parameter Types <a name="paramtypes"></a></h3>
+<p>Each parameter on a ROS 2 node has one of the pre-defined parameter types as mentioned in the Overview. By default, attempts to change the type of a declared parameter at runtime will fail. This prevents common mistakes, such as putting a boolean value into an integer parameter.</p>
+<p>If a parameter needs to be multiple different types, and the code using the parameter can handle it, this default behavior can be changed. When the parameter is declared, it should be declared using a <code>ParameterDescriptor</code> with the <code>dynamic_typing</code> member variable set to <code>true</code>.</p>
+<h3>Parameter Callbacks <a name="paramcb"></a></h3>
+<p>A ROS 2 node can register three different types of callbacks to be informed when changes are happening to parameters. All three of the callbacks are optional.</p>
+<p>The first is known as a “pre set parameter” callback, and can be set by calling <code>add_pre_set_parameters_callback</code> from the node API. This callback is passed a list of the <code>Parameter</code> objects that are being changed, and returns nothing. When it is called, it can modify the <code>Parameter</code> list to change, add, or remove entries. As an example, if <code>parameter2</code> should change anytime that <code>parameter1</code> changes, that can be implemented with this callback.</p>
+<p>The second is known as a “set parameter” callback, and can be set by calling <code>add_on_set_parameters_callback</code> from the node API. The callback is passed a list of immutable <code>Parameter</code> objects, and returns an <code>rcl_interfaces/msg/SetParametersResult</code>. The main purpose of this callback is to give the user the ability to inspect the upcoming change to the parameter and explicitly reject the change.</p>
+<p><strong>Note</strong></p>
+<p>It is important that “set parameter” callbacks have no side-effects. Since multiple “set parameter” callbacks can be chained, there is no way for an individual callback to know if a later callback will reject the update. If the individual callback were to make changes to the class it is in, for instance, it may get out-of-sync with the actual parameter. To get a callback after a parameter has been successfully changed, see the next type of callback below.</p>
+<p>The third type of callback is known as an “post set parameter” callback, and can be set by calling <code>add_post_set_parameters_callback</code> from the node API. The callback is passed a list of immutable <code>Parameter</code> objects, and returns nothing. The main purpose of this callback is to give the user the ability to react to changes from parameters that have successfully been accepted.</p>
+<h3>Interacting with Parameters <a name="paramint"></a></h3>
+<p>ROS 2 nodes can perform parameter operations through node APIs as described in Using parameters in a class (C++) or Using parameters in a class (Python). External processes can perform parameter operations via parameter services that are created by default when a node is instantiated. The services that are created by default are:</p>
+<ul>
+<li><p><code>/node_name/describe_parameters</code>: Uses a service type of <code>rcl_interfaces/srv/DescribeParameters</code>. Given a list of parameter names, returns a list of descriptors associated with the parameters.</p>
+</li>
+<li><p><code>/node_name/get_parameter_types</code>: Uses a service type of <code>rcl_interfaces/srv/GetParameterTypes</code>. Given a list of parameter names, returns a list of parameter types associated with the parameters.</p>
+</li>
+<li><p><code>/node_name/get_parameters</code>: Uses a service type of <code>rcl_interfaces/srv/GetParameters</code>. Given a list of parameter names, returns a list of parameter values associated with the parameters.</p>
+</li>
+<li><p><code>/node_name/list_parameters</code>: Uses a service type of <code>rcl_interfaces/srv/ListParameters</code>. Given an optional list of parameter prefixes, returns a list of the available parameters with that prefix. If the prefixes are empty, returns all parameters.</p>
+</li>
+<li><p><code>/node_name/set_parameters</code>: Uses a service type of <code>rcl_interfaces/srv/SetParameters</code>. Given a list of parameter names and values, attempts to set the parameters on the node. Returns a list of results from trying to set each parameter; some of them may have succeeded and some may have failed.</p>
+</li>
+<li><p><code>/node_name/set_parameters_atomically</code>: Uses a service type of <code>rcl_interfaces/srv/SetParametersAtomically</code>. Given a list of parameter names and values, attempts to set the parameters on the node. Returns a single result from trying to set all parameters, so if one failed, all of them failed.</p>
+</li>
+</ul>
+<h3>Setting initial parameter values when running a node <a name="paramsetr"></a></h3>
+<p>Initial parameter values can be set when running the node either through individual command-line arguments, or through YAML files. See Setting parameters directly from the command line for examples on how to set initial parameter values.</p>
+<h3>Setting initial parameter values when launching nodes <a name="paramsetl"></a></h3>
+<p>Initial parameter values can also be set when running the node through the ROS 2 launch facility. See this document for information on how to specify parameters via launch.</p>
+<h3>Manipulating parameter values at runtime <a name="parammani"></a></h3>
+<p>The <code>ros2 param</code> command is the general way to interact with parameters for nodes that are already running. <code>ros2 param</code> uses the parameter service API as described above to perform the various operations. See this how-to guide for details on how to use <code>ros2 param</code>.</p>
+<h3>Migrating from ROS 1 <a name="parammig"></a></h3>
+<p>The <a href="https://docs.ros.org/en/jazzy/How-To-Guides/Migrating-from-ROS1/Migrating-Launch-Files.html">Launch file migration guide</a> explains how to migrate <code>param</code> and <code>rosparam</code> launch tags from ROS 1 to ROS 2.</p>
+<p>The <a href="https://docs.ros.org/en/jazzy/How-To-Guides/Migrating-from-ROS1/Migrating-Parameters.html">YAML parameter file migration guide</a> explains how to migrate parameter files from ROS 1 to ROS 2.</p>
+<p>In ROS 1, the <code>roscore</code> acted like a global parameter blackboard where all nodes could get and set parameters. Since there is no central <code>roscore</code> in ROS 2, that functionality no longer exists. The recommended approach in ROS 2 is to use per-node parameters that are closely tied to the nodes that use them. If a global blackboard is still needed, it is possible to create a dedicated node for this purpose. ROS 2 ships with one in the <code>ros-jazzy-demo-nodes-cpp</code> package called <code>parameter_blackboard</code>; it can be run with:</p>
+<pre><code>ros2 run demo_nodes_cpp parameter_blackboard
+</code></pre>
+<p>The code for the <code>parameter_blackboard</code> is here.</p>
+<h3>Introspection with command line tools <a name="intros"></a></h3>
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#intusage">Usage</a></li>
+<li><a href="#integ">Example</a></li>
+<li><a href="#intbts">Behind the Scenes</a></li>
+<li><a href="#intimp">Implementation</a></li>
+</ul>
+<p>ROS 2 includes a suite of command-line tools for introspecting a ROS 2 system.</p>
+<h3>Usage <a name="intusage"></a></h3>
+<p>The main entry point for the tools is the command <code>ros2</code>, which itself has various sub-commands for introspecting and working with nodes, topics, services, and more.</p>
+<p>To see all available sub-commands run:</p>
+<pre><code>ros2 --help
+</code></pre>
+<p>Examples of sub-commands that are available include:</p>
+<ul>
+<li><code>action</code>: Introspect/interact with ROS actions</li>
+<li><code>bag</code>: Record/play a rosbag</li>
+<li><code>component</code>: Manage component containers</li>
+<li><code>daemon</code>: Introspect/configure the ROS 2 daemon</li>
+<li><code>doctor</code>: Check ROS setup for potential issues</li>
+<li><code>interface</code>: Show information about ROS interfaces</li>
+<li><code>launch</code>: Run/introspect a launch file</li>
+<li><code>lifecycle</code>: Introspect/manage nodes with managed lifecycles</li>
+<li><code>multicast</code>: Multicast debugging commands</li>
+<li><code>node</code>: Introspect ROS nodes</li>
+<li><code>param</code>: Introspect/configure parameters on a node</li>
+<li><code>pkg</code>: Introspect ROS packages</li>
+<li><code>run</code>: Run ROS nodes</li>
+<li><code>security</code>: Configure security settings</li>
+<li><code>service</code>: Introspect/call ROS services</li>
+<li><code>test</code>: Run a ROS launch test</li>
+<li><code>topic</code>: Introspect/publish ROS topics</li>
+<li><code>trace</code>: Tracing tools to get information on ROS nodes execution (only available on Linux)</li>
+<li><code>wtf</code>: An alias for doctor</li>
+</ul>
+<h3>Example <a name="integ"></a></h3>
+<p>To produce the typical talker-listener example using command-line tools, the topic sub-command can be used to publish and echo messages on a <code>topic</code>.</p>
+<p>Publish messages in one terminal with:</p>
+<pre><code>$ ros2 topic pub /chatter std_msgs/msg/String &quot;data: Hello world&quot;
+publisher: beginning loop
+publishing #1: std_msgs.msg.String(data=&#39;Hello world&#39;)
+
+publishing #2: std_msgs.msg.String(data=&#39;Hello world&#39;)
+</code></pre>
+<p>Echo messages received in another terminal with:</p>
+<pre><code>$ ros2 topic echo /chatter
+data: Hello world
+
+data: Hello world
+</code></pre>
+<h3>Behind the scenes <a name="intbts"></a></h3>
+<p>ROS 2 uses a distributed discovery process for nodes to connect to each other. As this process purposefully does not use a centralized discovery mechanism, it can take time for ROS nodes to discover all other participants in the ROS graph. Because of this, there is a long-running daemon in the background that stores information about the ROS graph to provide faster responses to queries, e.g. the list of node names.</p>
+<p>The daemon is automatically started when the relevant command-line tools are used for the first time. You can run <code>ros2 daemon --help</code> for more options for interacting with the daemon.</p>
+<h3>Implementation <a name="intimp"></a></h3>
+<p>The source code for the <code>ros2 command</code> is available at <a href="https://github.com/ros2/ros2cli">https://github.com/ros2/ros2cli</a>.</p>
+<p>The <code>ros2</code> tool has been implemented as a framework that can be extended via plugins. For example, the <a href="https://github.com/ros2/sros2">sros2</a> package provides a <code>security</code> sub-command that is automatically detected by the <code>ros2</code> tool if the <code>sros2</code> package is installed.</p>
+<h3>Launch <a name="launch"></a></h3>
+<p>A ROS 2 system typically consists of many nodes running across many different processes (and even different machines). While it is possible to run each of these nodes separately, it gets cumbersome quite quickly.</p>
+<p>The launch system in ROS 2 is meant to automate the running of many nodes with a single command. It helps the user describe the configuration of their system and then executes it as described. The configuration of the system includes what programs to run, where to run them, what arguments to pass them, and ROS-specific conventions which make it easy to reuse components throughout the system by giving them each a different configuration. It is also responsible for monitoring the state of the processes launched, and reporting and/or reacting to changes in the state of those processes.</p>
+<p>All of the above is specified in a launch file, which can be written in Python, XML, or YAML. This launch file can then be run using the <code>ros2 launch</code> command, and all of the nodes specified will be run.</p>
+<p>The <a href="https://design.ros2.org/articles/roslaunch.html">design document</a> details the goal of the design of ROS 2’s launch system (not all functionality is currently available).</p>
+<h3>Client Libraries <a name="clilib"></a></h3>
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#cliove">Overview</a></li>
+<li><a href="#clispt">Supported Client Libraries</a><ul>
+<li><a href="#clicpp">The rclcpp Package</a></li>
+<li><a href="#clipy">The rclpy Package</a></li>
+</ul>
+</li>
+<li><a href="#clicom">Common Functionality: rcl</a></li>
+<li><a href="#clilang">Language-specific Functionality</a></li>
+<li><a href="#clicomp">Comparison to ROS 1</a></li>
+<li><a href="#clisum">Summary</a></li>
+</ul>
+<h3>Overview <a name="cliove"></a></h3>
+<p>Client libraries are the APIs that allow users to implement their ROS 2 code. Using client libraries, users gain access to ROS 2 concepts such as nodes, topics, services, etc. Client libraries come in a variety of programming languages so that users may write ROS 2 code in the language that is best-suited for their application. For example, you might prefer to write visualization tools in Python because it makes prototyping iterations faster, while for parts of your system that are concerned with efficiency, the nodes might be better implemented in C++.</p>
+<p>Nodes written using different client libraries are able to share messages with each other because all client libraries implement code generators that provide users with the capability to interact with ROS 2 interface files in the respective language.</p>
+<p>In addition to the language-specific communication tools, client libraries expose to users the core functionality that makes ROS “ROS”. For example, here is a list of functionality that can typically be accessed through a client library:</p>
+<ul>
+<li>Names and namespaces</li>
+<li>Time (real or simulated)</li>
+<li>Parameters</li>
+<li>Console logging</li>
+<li>Threading model</li>
+<li>Intra-process communication</li>
+</ul>
+<h3>Supported Client Libraries <a name="clispt"></a></h3>
+<p>The C++ client library (<code>rclcpp</code>) and the Python client library (<code>rclpy</code>) are both client libraries which utilize common functionality in rcl.</p>
+<h3>The <code>rclcpp</code> package <a name="clicpp"></a></h3>
+<p>The ROS Client Library for C++ (<code>rclcpp</code>) is the user facing, C++ idiomatic interface which provides all of the ROS client functionality like creating nodes, publishers, and subscriptions. <code>rclcpp</code> builds on top of <code>rcl</code> and the <code>rosidl</code> API, and it is designed to be used with the C++ messages generated by <code>rosidl_generator_cpp</code>.</p>
+<p><code>rclcpp</code> makes use of all the features of C++ and C++17 to make the interface as easy to use as possible, but since it reuses the implementation in <code>rcl</code> it is able maintain a consistent behavior with the other client libraries that use the <code>rcl</code> API.</p>
+<p>The <code>rclcpp</code> repository is located on GitHub at ros2/rclcpp and contains the package <code>rclcpp</code>. The generated API documentation is here:</p>
+<p><a href="http://docs.ros.org/en/jazzy/p/rclcpp">api/rclcpp/index.html</a></p>
+<h3>The <code>rclpy</code> package <a name="clipy"></a></h3>
+<p>The ROS Client Library for Python (rclpy) is the Python counterpart to the C++ client library. Like the C++ client library, rclpy also builds on top of the rcl C API for its implementation. The interface provides an idiomatic Python experience that uses native Python types and patterns like lists and context objects. By using the rcl API in the implementation, it stays consistent with the other client libraries in terms of feature parity and behavior. In addition to providing Python idiomatic bindings around the rcl API and Python classes for each message, the Python client library takes care of the execution model, using threading.Thread or similar to run the functions in the rcl API.</p>
+<p>Like C++ it generates custom Python code for each ROS message that the user interacts with, but unlike C++ it eventually converts the native Python message object into the C version of the message. All operations happen on the Python version of the messages until they need to be passed into the rcl layer, at which point they are converted into the plain C version of the message so it can be passed into the rcl C API. This is avoided if possible when communicating between publishers and subscriptions in the same process to cut down on the conversion into and out of Python.</p>
+<p>The rclpy repository is located on GitHub at ros2/rclpy and contains the package rclpy. The generated API documentation is here:
+<a href="https://docs.ros.org/en/jazzy/p/rclpy/">api/rclpy/index.html</a></p>
+<h3>Common functionality: <code>rcl</code> <a name="clicom"></a></h3>
+<p>Most of the functionality found in a client library is not specific to the programming language of the client library. For example, the behavior of parameters and the logic of namespaces should ideally be the same across all programming languages. Because of this, rather than implementing the common functionality from scratch, client libraries make use of a common core ROS Client Library (RCL) interface that implements logic and behavior of ROS concepts that is not language-specific. As a result, client libraries only need to wrap the common functionality in the RCL with foreign function interfaces. This keeps client libraries thinner and easier to develop. For this reason the common RCL functionality is exposed with C interfaces as the C language is typically the easiest language for client libraries to wrap.</p>
+<p>In addition to making the client libraries light-weight, an advantage of having the common core is that the behavior between languages is more consistent. If any changes are made to the logic/behavior of the functionality in the core RCL – namespaces, for example – all client libraries that use the RCL will have these changes reflected. Furthermore, having the common core means that maintaining multiple client libraries becomes less work when it comes to bug fixes.</p>
+<h3>Language-specific functionality <a name="clilang"></a></h3>
+<p>Client library concepts that require language-specific features/properties are not implemented in the RCL but instead are implemented in each client library. For example, threading models used by “spin” functions will have implementations that are specific to the language of the client library.</p>
+<h3>Comparison to ROS 1 <a name="clicomp"></a></h3>
+<p>In ROS 1, all client libraries are developed “from the ground up”. This allows for the ROS 1 Python client library to be implemented purely in Python, for example, which brings benefits of such as not needing to compile code. However, naming conventions and behaviors are not always consistent between client libraries, bug fixes have to be done in multiple places, and there is a lot of functionality that has only ever been implemented in one client library (e.g. UDPROS).</p>
+<h3>Summary <a name="clisum"></a></h3>
+<p>By utilizing the common core ROS client library, client libraries written in a variety of programming languages are easier to write and have more consistent behavior.</p>
+<h2>Intermediate Concepts <a name="int"></a></h2>
+<h3>The ROS_DOMAIN_ID <a name="rosdom"></a></h3>
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#interover">Overview</a></li>
+<li><a href="#domshort">Choosing a Domain ID (short version)</a></li>
+<li><a href="#domlong">Choosing a Domain ID (long version)</a><ul>
+<li><a href="#pltconst">Platform-specific constraints</a></li>
+<li><a href="#prtconst">Participant constraints</a></li>
+</ul>
+</li>
+</ul>
+<h3>Overview <a name="interover"></a></h3>
+<p>As explained elsewhere, the default middleware that ROS 2 uses for communication is DDS. In DDS, the primary mechanism for having different logical networks share a physical network is known as the Domain ID. ROS 2 nodes on the same domain can freely discover and send messages to each other, while ROS 2 nodes on different domains cannot. All ROS 2 nodes use domain ID 0 by default. To avoid interference between different groups of computers running ROS 2 on the same network, a different domain ID should be set for each group.</p>
+<h3>Chooseing  a domain ID(Short version) <a name="domshort"></a></h3>
+<p>The text below explains the derivation of the range of domain IDs that should be used in ROS 2. To skip that background and just choose a safe number, simply choose a domain ID between 0 and 101, inclusive.</p>
+<h3>Chooseing  a domain ID(Long version) <a name="domlong"></a></h3>
+<p>The domain ID is used by DDS to compute the UDP ports that will be used for discovery and communication. See this article for details on how the ports are computed. Remembering our basic networking, the UDP port is an unsigned 16-bit integer. Thus, the highest port number that can be allocated is 65535. Doing some math with the formula in the article above, this means that the highest domain ID that can possibly be assigned is 232, while the lowest that can be assigned is 0.</p>
+<h3>Platform-Specific Constraints <a name="pltconst"></a></h3>
+<p>For maximum compatibility, some additional platform-specific constraints should be followed when choosing a domain ID. In particular, it is best to avoid allocating domain IDs in the operating system’s ephemeral port range. This avoids possible conflicts between the ports used by the ROS 2 nodes and other networking services on the computers.</p>
+<p><strong>For Linux:</strong>
+By default, the Linux kernel uses ports 32768-60999 for ephemeral ports. This means that domain IDs 0-101 and 215-232 can be safely used without colliding with ephemeral ports. The ephemeral port range is configurable in Linux by setting custom values in <code>/proc/sys/net/ipv4/ip_local_port_range</code>. If a custom ephemeral port range is used, the above numbers may have to be adjusted accordingly.</p>
+<h3>Participant Constraints <a name="prtconst"></a></h3>
+<p>For each ROS 2 process running on a computer, one DDS “participant” is created. Since each DDS participant takes up two ports on the computer, running more than 120 ROS 2 processes on one computer may spill over into other domain IDs or the ephemeral ports.</p>
+<p>To see why, consider the domain IDs 1 and 2.</p>
+<ul>
+<li>Domain ID 1 uses port 7650 and 7651 for multicast.</li>
+<li>Domain ID 2 uses port 7900 and 7901 for multicast.</li>
+<li>When creating the 1st process (zeroth participant) in domain ID 1, the ports 7660 and 7661 are used for unicast.</li>
+<li>When creating the 120th process (119th participant) in domain ID 1, the ports 7898 and 7899 are used for unicast.</li>
+<li>When creating the 121st process (120th participant) in domain ID 1, the ports 7900 and 7901 are used for unicast and overlap with domain ID 2.</li>
+</ul>
+<p>If it is known that the computer will only ever be on a single domain ID at a time, and the domain ID is low enough, it is safe to create more ROS 2 processes than this.</p>
+<p>When choosing a domain ID that is near the top of the range of platform-specific domain IDs, one additional constraint should be considered.</p>
+<p>For instance, assume a Linux computer with a domain ID of 101:</p>
+<ul>
+<li>The zero’th ROS 2 process on the computer will connect to ports 32650, 32651, 32660, and 32661.</li>
+<li>The first ROS 2 process on the computer will connect to ports 32650, 32651, 32662, and 32663.</li>
+<li>The 53rd ROS 2 process on the computer will connect to ports 32650, 32651, 32766, and 32767.</li>
+<li>The 54th ROS 2 process on the computer will connect to ports 32650, 32651, 32768, and 32769, running into the ephemeral port range.</li>
+</ul>
+<p>Thus the maximum number of processes that should be created when using domain ID 101 on Linux is 54. Similarly, the maximum number of processes that should be created when using domain ID 232 on Linux is 63, as the maximum port number is 65535.</p>
+<p>The situation is similar on macOS and Windows, though the numbers are different. On macOS and Windows, when choosing a domain ID of 166 (the top of the range), the maximum number of ROS 2 processes that can be created on a computer before running into the ephemeral port range is 120.</p>
+<h3>Different ROS 2 midddleware vendors <a name="interdif"></a></h3>
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#rmwimp">Supported RMW implementation</a></li>
+<li><a href="mrmwimp">Multiple RMW implementation</a></li>
+<li><a href="drmwimp">Default RMW implementation</a></li>
+</ul>
+<p>ROS 2 is built on top of DDS/RTPS as its middleware, which provides discovery, serialization and transportation. This article explains the motivation behind using DDS implementations, and/or the RTPS wire protocol of DDS, in detail. In summary, DDS is an end-to-end middleware that provides features which are relevant to ROS systems, such as distributed discovery (not centralized like in ROS 1) and control over different “Quality of Service” options for the transportation.</p>
+<p>DDS is an industry standard which is implemented by a range of vendors, such as RTI’s Connext DDS, eProsima’s Fast DDS, Eclipse’s Cyclone DDS, or GurumNetworks’s GurumDDS. RTPS (a.k.a. DDSI-RTPS) is the wire protocol used by DDS to communicate over the network.</p>
+<p>ROS 2 supports multiple DDS/RTPS implementations because it is not necessarily “one size fits all” when it comes to choosing a vendor/implementation. There are many factors you might consider while choosing a middleware implementation: logistical considerations like the license, or technical considerations like platform availability, or computation footprint. Vendors may provide more than one DDS or RTPS implementation targeted at meeting different needs. For example, RTI has a few variations of their Connext implementation that vary in purpose, like one that specifically targets microcontrollers and another which targets applications requiring special safety certifications (we only support their standard desktop version at this time).</p>
+<p>In order to use a DDS/RTPS implementation with ROS 2, a “ROS Middleware interface” (a.k.a. <code>rmw</code> interface or just <code>rmw</code>) package needs to be created that implements the abstract ROS middleware interface using the DDS or RTPS implementation’s API and tools. It’s a lot of work to implement and maintain RMW packages for supporting DDS implementations, but supporting at least a few implementations is important for ensuring that the ROS 2 codebase is not tied to any one particular implementation, as users may wish to switch out implementations depending on their project’s needs.</p>
+<h3>Supported RMW Implementations <a name="rmwimp"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Product Name</th>
+<th>License</th>
+<th>RMW Implementation</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>eProsima Fast DDS</td>
+<td>Apache 2</td>
+<td>rmw_fastrtps_cpp</td>
+<td>Full support. Default RMW. Packaged with binary releases.</td>
+</tr>
+<tr>
+<td>Eclipse Cyclone DDS</td>
+<td>Eclipse Public License v2.0</td>
+<td>rmw_cyclonedds_cpp</td>
+<td>Full support. Packaged with binary releases.</td>
+</tr>
+<tr>
+<td>RTI Connext DDS</td>
+<td>commercial, research</td>
+<td>rmw_connextdds</td>
+<td>Full support. Support included in binaries, but Connext installed separately.</td>
+</tr>
+<tr>
+<td>GurumNetworks GurumDDS</td>
+<td>commercial</td>
+<td>rmw_gurumdds_cpp</td>
+<td>Community support. Support included in binaries, but GurumDDS installed separately.</td>
+</tr>
+</tbody></table>
+<h3>Multiple RMW Implementations <a name="mrmwimp"></a></h3>
+<p>The ROS 2 binary releases for currently active distros have built-in support for several RMW implementations out of the box (Fast DDS, RTI Connext Pro, Eclipse Cyclone DDS, GurumNetworks GurumDDS). The default is Fast DDS, which works without any additional installation steps because we distribute it with our binary packages.</p>
+<p>Other RMWs like Cyclone DDS, Connext or GurumDDS can be enabled by installing additional packages, but without having to rebuild anything or replace any existing packages.</p>
+<p>A ROS 2 workspace that has been built from source may build and install multiple RMW implementations simultaneously. While the core ROS 2 code is being compiled, any RMW implementation that is found will be built if the relevant DDS/RTPS implementation has been installed properly and the relevant environment variables have been configured. For example, if the code for the RMW package for RTI Connext DDS is in the workspace, it will be built if an installation of RTI’s Connext Pro can also be found.</p>
+<p>For many cases you will find that nodes using different RMW implementations are able to communicate, however this is not true under all circumstances. Here is a list of inter-vendor communication configurations that are not supported:
+<strong>Fast DDS &lt;-&gt; Connext</strong></p>
+<ul>
+<li><code>WString</code> published by Fast DDS can’t be received correctly by Connext on macOS</li>
+</ul>
+<p><strong>Connext &lt;-&gt; Cyclone DDS</strong></p>
+<ul>
+<li>does not support pub/sub communication for <code>WString</code></li>
+</ul>
+<h3>Default RMW Implementation <a name="drmwimp"></a></h3>
+<p>If a ROS 2 workspace has multiple RMW implementations, Fast DDS is selected as the default RMW implementation if it is available. If the Fast DDS RMW implementation is not installed, the RMW implementation with the first RMW implementation identifier in alphabetical order will be used. The implementation identifier is the name of the ROS package that provides the RMW implementation, e.g. <code>rmw_cyclonedds_cpp</code>. For example, if both <code>rmw_cyclonedds_cpp</code> and <code>rmw_connextdds</code> ROS packages are installed, <code>rmw_connextdds</code> would be the default. If <code>rmw_fastrtps_cpp</code> is ever installed, it would be the default.</p>
+<h3>Logging and Logger Configuration <a name="interlog"></a></h3>
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#logover">Overview</a></li>
+<li><a href="#logsever">Severity Level</a></li>
+<li><a href="#apis">APIs</a></li>
+<li><a href="#logconfig">Configuration</a><ul>
+<li><a href="#logenv">Environment Variables</a></li>
+<li><a href="#lognode">Node Creation</a></li>
+</ul>
+</li>
+<li><a href="#loglsd">Logging Subsystem Design</a><ul>
+<li><a href="#rcutils">rcutils</a></li>
+<li><a href="#rclspdlog">rcl_logging_spdlog</a></li>
+<li><a href="#rcl">rcl</a></li>
+<li><a href="#rclcpp">rclcpp</a></li>
+<li><a href="#rclpy">rclpy</a></li>
+</ul>
+</li>
+</ul>
+<h3>Overview <a name="logover"></a></h3>
+<p>The logging subsystem in ROS 2 aims to deliver logging messages to a variety of targets, including:</p>
+<ol>
+<li><p>To the console (if one is attached)</p>
+</li>
+<li><p>To log files on disk (if local storage is available)</p>
+</li>
+<li><p>To the <code>/rosout</code> topic on the ROS 2 network</p>
+</li>
+</ol>
+<p>By default, log messages in ROS 2 nodes will go out to the console (on stderr), to log files on disk, and to the <code>/rosout</code> topic on the ROS 2 network. All of the targets can be individually enabled or disabled on a per-node basis.</p>
+<p>The rest of this document will go over some of the ideas behind the logging subsystem.</p>
+<h3>Severity Level <a name="logsever"></a></h3>
+<p>Log messages have a severity level associated with them: <code>DEBUG</code>, <code>INFO</code>, <code>WARN</code>, <code>ERROR</code> or <code>FATAL</code>, in ascending order.</p>
+<p>A logger will only process log messages with severity at or higher than a specified level chosen for the logger.</p>
+<p>Each node has a logger associated with it that automatically includes the node’s name and namespace. If the node’s name is externally remapped to something other than what is defined in the source code, it will be reflected in the logger name. Non-node loggers can also be created that use a specific name.</p>
+<p>Logger names represent a hierarchy. If the level of a logger named “abc.def” is unset, it will defer to the level of its parent named “abc”, and if that level is also unset, the default logger level will be used. When the level of logger “abc” is changed, all of its descendants (e.g. “abc.def”, “abc.ghi.jkl”) will have their level impacted unless their level has been explicitly set.</p>
+<h3>APIs <a name="apis"></a></h3>
+<p>These are the APIs that end users of the ROS 2 logging infrastructure should use, split up by client library.</p>
+<ul>
+<li><code>logger.{debug,info,warning,error,fatal}</code>: Output the given Python string to the logging infrastructure. The calls accept the following keyword arguments to control behavior:<ul>
+<li><code>throttle_duration_sec</code>: If not <code>None</code>, the duration of the throttle interval in floating-point seconds.</li>
+<li><code>skip_first</code>: If <code>True</code>, output the message all but the first time this line is hit.</li>
+<li><code>once</code>: If <code>True</code>, only output the message the first time this line is hit.</li>
+</ul>
+</li>
+<li><code>rclpy.logging.set_logger_level</code>: Set the logging level for a particular logger name to the given severity level.</li>
+<li><code>rclpy.logging.get_logger_effective_level</code>: Given a logger name, return the logger level (which may be unset).</li>
+</ul>
+<h3>Configuration <a name="logconfig"></a></h3>
+<p>Since <code>rclcpp</code> and <code>rclpy</code> use the same underlying logging infrastructure, the configuration options are the same.</p>
+<h3>Environment Variables <a name="logenv"></a></h3>
+<p>The following environment variables control some aspects of the ROS 2 loggers. For each of the environment settings, note that this is a process-wide setting, so it applies to all nodes in that process.</p>
+<ul>
+<li><code>ROS_LOG_DIR</code>: Control the logging directory that is used for writing logging messages to disk (if that is enabled). If non-empty, use the exact directory as specified in this variable. If empty, use the contents of the <code>ROS_HOME</code> environment variable to construct a path of the form <code>$ROS_HOME/.log</code>. In all cases, the <code>~</code> character is expanded to the user’s HOME directory.</li>
+<li><code>ROS_HOME</code>: Control the home directory that is used for various ROS files, including logging and config files. In the context of logging, this variable is used to construct a path to a directory for log files. If non-empty, use the contents of this variable for the <code>ROS_HOME</code> path. In all cases, the <code>~</code> character is expanded to the user’s HOME directory.</li>
+<li><code>RCUTILS_LOGGING_USE_STDOUT</code>: Control what stream output messages go to. If this is unset or <code>0</code>, use stderr. If this is <code>1</code>, use stdout.</li>
+<li><code>RCUTILS_LOGGING_BUFFERED_STREAM</code>: Control whether the logging stream (as configured in <code>RCUTILS_LOGGING_USE_STDOUT</code>) should be line buffered or unbuffered. If this is unset, use the default of the stream (generally line buffered for stdout, and unbuffered for stderr). If this is <code>0</code>, force the stream to be unbuffered. If this is <code>1</code>, force the stream to be line buffered.</li>
+<li><code>RCUTILS_COLORIZED_OUTPUT</code>: Control whether colors are used when outputting messages. If unset, automatically determine based on the platform and whether the console is a TTY. If <code>0</code>, force disable using colors for output. If <code>1</code>, force enable using colors for output.</li>
+<li><code>RCUTILS_CONSOLE_OUTPUT_FORMAT</code>: Control the fields that are output for each log message. The available fields are:<ul>
+<li><code>{severity}</code>: The severity level.</li>
+<li><code>{name}</code>: The name of the logger (may be empty).</li>
+<li><code>{message}</code>: The log message (may be empty).</li>
+<li><code>{function_name}</code>: The function name this was called from (may be empty).</li>
+<li><code>{file_name}</code>: The file name this was called from (may be empty).</li>
+<li><code>{time}</code>: The time in seconds since the epoch.</li>
+<li><code>{time_as_nanoseconds}</code>: The time in nanoseconds since the epoch.</li>
+<li><code>{line_number}</code>: The line number this was called from (may be empty).</li>
+</ul>
+</li>
+</ul>
+<p>If no format is given, a default of <code>[{severity}] [{time}] [{name}]: {message}</code> is used.</p>
+<h3>Node Creation <a name="lognode"></a></h3>
+<p>When initializing a ROS 2 node, it is possible to control some aspects of the behavior via node options. Since these are per-node options, they can be set differently for different nodes even when the nodes are composed into a single process.</p>
+<p>-<code>log_levels</code> - The log level to use for a component within this particular node. This can be set with the following: ros2 run demo_nodes_cpp talker --ros-args --log-level talker:=DEBUG</p>
+<p>-<code>external_log_config_file</code> - The external file to use to configure the backend logger. If it is NULL, the default configuration will be used. Note that the format of this file is backend-specific (and is currently unimplemented for the default backend logger of spdlog). This can be set with the following: ros2 run demo_nodes_cpp talker --ros-args --log-config-file log-config.txt</p>
+<p>-<code>log_stdout_disabled</code> - Whether to disable writing log messages to the console. This can be done with the following: ros2 run demo_nodes_cpp talker --ros-args --disable-stdout-logs</p>
+<p>-<code>log_rosout_disabled</code> - Whether to disable writing log messages out to /rosout. This can significantly save on network bandwidth, but external observers will not be able to monitor logging. This can be done with the following: ros2 run demo_nodes_cpp talker --ros-args --disable-rosout-logs</p>
+<p>-<code>log_ext_lib_disabled</code> - Whether to completely disable the use of an external logger. This may be faster in some cases, but means that logs will not be written to disk. This can be done with the following: ros2 run demo_nodes_cpp talker --ros-args --disable-external-lib-logs</p>
+<h3>rcutils <a name="rcutils"></a></h3>
+<p><code>rcutils</code> has a logging implementation that can format log messages according to a certain format (see <code>Configuration</code> above), and output those log messages to a console. <code>rcutils</code> implements a complete logging solution, but allows higher-level components to insert themselves into the logging infrastructure in a dependency-injection model. This will become more evident when we talk about the rcl layer below.</p>
+<p>Note that this is a per-process logging implementation, so anything that is configured at this level will affect the entire process, not just individual nodes.</p>
+<h3>rcl_logging_spdlog <a name="rclspdlog"></a></h3>
+<p><code>rcl_logging_spdlog</code> implements the <code>rcl_logging_interface</code> API, and thus provides external logging services to the <code>rcl</code> layer. In particular, the <code>rcl_logging_spdlog</code> implementation takes formatted log messages and writes them out to log files on disk using the <code>spdlog</code> library, typically within <code>~/.ros/log</code> (though this is configurable; see <code>Configuration</code> above).</p>
+<h3>rcl <a name="rcl"></a></h3>
+<p>The logging subsystem in <code>rcl</code> uses <code>rcutils</code> and <code>rcl_logging_spdlog</code> to provide the bulk of the ROS 2 logging services. When log messages come in, rcl decides where to send them. There are 3 main places that logging messages can be delivered; an individual node may have any combination of them enabled:</p>
+<ol>
+<li><p>To the console via the <code>rcutils</code> layer</p>
+</li>
+<li><p>To disk via the <code>rcl_logging_spdlog</code> layer</p>
+</li>
+<li><p>To the <code>/rosout</code> topic on the ROS 2 network via the RMW layer</p>
+</li>
+</ol>
+<h3>rclcpp <a name="rclcpp"></a></h3>
+<p>This is the main ROS 2 C++ API which sits atop the rcl API. In the context of logging, rclcpp provides the RCLCPP_ logging macros; see APIs above for a complete list. When one of the RCLCPP_ macros runs, it checks the current severity level of the node against the severity level of the macro. If the severity level of the macro is greater than or equal to the node severity level, the message will be formatted and output to all of the places that are currently configured. Note that rclcpp uses a global mutex for log calls, so all logging calls within the same process end up being single-threaded.</p>
+<h3>rclpy <a name="rclpy"></a></h3>
+<p>This is the main ROS 2 Python API which sits atop the <code>rcl</code> API. In the context of logging, <code>rclpy</code> provides the <code>logger.debug</code>-style functions; see <code>APIs</code> above for a complete list. When one of the <code>logger.debug</code> functions runs, it checks the current severity level of the node against the severity level of the macro. If the severity level of the macro is greater than or equal to the node severity level, the message will be formatted and output to all of the places that are currently configured.</p>
+<h2>8. Additional Reference Materials <a name="addref"></a></h2>
+<h3>Books</h3>
+<ol>
+<li>&quot;Programming Robots with ROS: A Practical Introduction to the Robot Operating System&quot; by Morgan Quigley, Brian Gerkey, and William D. Smart</li>
+<li>&quot;ROS Robotics Projects: Build and control robots powered by the Robot Operating System, machine learning, and virtual reality&quot; by Lentin Joseph</li>
+<li>&quot;ROS 2 Robot Programming: A Handbook for Robotics Software Developers&quot; by Anis Koubaa</li>
+<li>&quot;Mastering ROS for Robotics Programming&quot; by Lentin Joseph</li>
+<li>&quot;ROS Robotics by Example&quot; by Carol Fairchild and Dr. Thomas L. Harman</li>
+</ol>
+<h3>YouTube Channels</h3>
+<ol>
+<li><a href="https://www.youtube.com/user/robotigniteacademy">The Construct: Robotics Education &amp; Training</a></li>
+<li><a href="https://www.youtube.com/channel/UCt6Lag-vv25fTX3e11mVY1Q">ROS Developers Podcast</a></li>
+<li><a href="https://www.youtube.com/user/roscon2013">ROSCon: ROS Conference Videos</a></li>
+<li><a href="https://www.youtube.com/user/RoboticSystemsLab">Robotic Systems Lab ETH Zurich</a></li>
+<li><a href="https://www.youtube.com/channel/UCZSN8mgzSsiLHRgsWKuEALg">Isaac SDK &amp; Robotics</a></li>
+</ol>
+<h3>Courses</h3>
+<ol>
+<li>ROS Developer Learning Path on <a href="https://www.udemy.com/">Udemy</a></li>
+<li>ROS for Beginners on <a href="https://www.coursera.org/">Coursera</a></li>
+<li><a href="https://www.theconstructsim.com/ros-navigation-in-5-days/">ROS Navigation in 5 Days</a> by The Construct</li>
+<li>ROS Industrial Training on <a href="https://rosindustrial.org/">ROS-Industrial Consortium Americas</a></li>
+<li>ROS2 Tutorials on <a href="https://docs.ros.org/">ROS2 Documentation</a></li>
+</ol>
+<h3>Forums and Communities</h3>
+<ol>
+<li><a href="https://discourse.ros.org/">ROS Discourse</a></li>
+<li><a href="https://answers.ros.org/">ROS Answers</a></li>
+<li><a href="https://discord.com/invite/ros">ROS Discords</a></li>
+<li><a href="https://rosindustrial.org/">ROS-Industrial Consortium</a></li>
+<li>ROS Meetup Groups (Search for local or virtual groups on <a href="https://www.meetup.com/">Meetup</a> or similar platforms)</li>
+</ol>
+<h2>9. Project Assignment: Autonomous Delivery Robot <a name="oa"></a></h2>
+<h3>Introduction:</h3>
+<p>In this project assignment, you will have the opportunity to design and develop an autonomous delivery robot using ROS 2, a powerful robotic middleware platform. The robot will be capable of navigating indoor environments and delivering items to predefined destinations autonomously. This assignment will allow you to apply your skills in robotics, software development, and system integration to tackle a real-world problem in logistics and automation.</p>
+<h3>Objective:</h3>
+<p>Your objective is to design, develop, and demonstrate a fully functional autonomous delivery robot that can efficiently navigate indoor environments, avoid obstacles, and deliver items to specified locations. The robot should leverage ROS 2 for communication, control, and coordination between its various software modules and hardware components.</p>
+<h3>Tasks:</h3>
+<ol>
+<li><p><strong>Hardware Selection and Integration:</strong></p>
+<ul>
+<li>Research and select appropriate hardware components for the autonomous delivery robot, including sensors, actuators, and onboard computing hardware.</li>
+<li>Assemble and integrate the selected hardware components into a functional robot platform.</li>
+</ul>
+</li>
+<li><p><strong>Software Development:</strong></p>
+<ul>
+<li>Develop ROS 2 nodes for sensor data processing, perception, localization, path planning, and motion control.</li>
+<li>Implement algorithms for environment mapping, obstacle detection, and navigation within ROS 2 framework.</li>
+<li>Integrate software modules into a cohesive system architecture following ROS 2 best practices.</li>
+</ul>
+</li>
+<li><p><strong>Integration and Testing:</strong></p>
+<ul>
+<li>Integrate the hardware and software components of the autonomous delivery robot.</li>
+<li>Conduct comprehensive testing to ensure the reliability, safety, and performance of the robot in simulated and/or real-world environments.</li>
+<li>Debug and troubleshoot any issues encountered during testing.</li>
+</ul>
+</li>
+<li><p><strong>User Interface Design:</strong></p>
+<ul>
+<li>Design and implement a user-friendly interface for task assignment, monitoring, and interaction with the autonomous delivery robot.</li>
+<li>Ensure seamless integration of the user interface with the ROS 2 control system.</li>
+</ul>
+</li>
+<li><p><strong>Documentation and Presentation:</strong></p>
+<ul>
+<li>Document the design, implementation, and testing procedures of the autonomous delivery robot project.</li>
+<li>Prepare a final presentation showcasing the robot&#39;s functionality, performance, and contributions to the field of autonomous robotics.</li>
+<li>Present the project findings and demonstrate the robot to the stakeholders.</li>
+</ul>
+</li>
+</ol>
+<h3>Deliverables:</h3>
+<ul>
+<li>Setup integration documentation.</li>
+<li>Software source code and ROS 2 package repository.</li>
+<li>Test reports and documentation of testing procedures.</li>
+<li>User interface design documentation and implementation.</li>
+<li>Final project presentation slides and demonstration video.</li>
+</ul>
+<h3>Resources:</h3>
+<ul>
+<li>ROS 2 documentation and tutorials.</li>
+<li>Robotics hardware components and platforms.</li>
+<li>Simulation environments such as Gazebo and RViz.</li>
+<li>Programming tools and libraries for robotics development.</li>
+</ul>
+<p><strong>Note:</strong> Regular progress updates and team meetings will be scheduled throughout the project timeline to track progress, address challenges, and provide support as needed. Collaboration and teamwork are essential for the successful completion of this project assignment.</p>
+<h2>12. Hands-on Exercises for Learning ROS 2 <a name="hoe"></a></h2>
+<h3>Introduction to ROS 2</h3>
+<p><strong>Exercise:</strong> Install ROS 2 on your preferred operating system (Ubuntu, Windows, macOS) and run the basic demo nodes to ensure successful installation.
+<strong>Note:</strong> Ensure to follow the installation instructions carefully, and if you encounter any issues, refer to the official ROS 2 documentation or seek help from ROS communities.</p>
+<h3>Setting Up the Environment</h3>
+<p><strong>Exercise:</strong> Create a ROS 2 workspace, build a simple package, and run it to confirm that the workspace setup is correct.
+<strong>Note:</strong> Pay attention to the workspace directory structure and use the appropriate build commands (e.g., <code>colcon build</code>) to compile your package.</p>
+<h3>Basic Concepts</h3>
+<p><strong>Exercise:</strong> Write a simple ROS 2 publisher node in both C++ and Python that publishes messages on a custom topic.
+<strong>Note:</strong> Experiment with different message types and understand how to define message structures and publish data.</p>
+<h3>ROS 2 Workspaces and Packages</h3>
+<p><strong>Exercise:</strong> Create a new ROS 2 package with dependencies, build it within a workspace, and launch nodes from the package using launch files.
+<strong>Note:</strong> Practice managing package dependencies and organizing your workspace efficiently.</p>
+<h3>Programming with ROS 2</h3>
+<p><strong>Exercise:</strong> Develop a ROS 2 service node that provides a basic service, and write a client node to interact with the service.
+<strong>Note:</strong> Pay attention to the service definition, request-response communication, and error handling in client-server interactions.</p>
+<h3>Advanced ROS 2 Features</h3>
+<p><strong>Exercise:</strong> Integrate a simulated sensor (e.g., Lidar or camera) into a ROS 2 environment, and visualize its data in a visualization tool like RViz.
+<strong>Note:</strong> Experiment with different sensor models and understand how to interface simulated hardware with ROS 2 nodes.</p>
+<h3>Debugging and Testing</h3>
+<p><strong>Exercise:</strong> Write unit tests for your ROS 2 nodes using testing frameworks like <code>gtest</code> or <code>pytest</code>, and debug any issues encountered during testing.
+<strong>Note:</strong> Practice writing test cases to cover different scenarios and ensure the robustness of your code.</p>
+<h3>Project: Building a Simple Robot Application</h3>
+<p><strong>Exercise:</strong> Design and implement a simple robot application using ROS 2, incorporating concepts learned throughout the modules, such as node communication, services, and launch files.
+<strong>Note:</strong> Focus on modular design and code reusability, and document your project structure and functionality effectively.</p>

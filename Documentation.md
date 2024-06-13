@@ -666,7 +666,7 @@ The code for the `parameter_blackboard` is here.
 ### Introspection with command line tools <a name="intros"></a>
 ### Table of Contents
 - [Usage](#intusage)
-- [Example](integ)
+- [Example](#integ)
 - [Behind the Scenes](#intbts)
 - [Implementation](#intimp)
 
